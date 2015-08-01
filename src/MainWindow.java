@@ -1,10 +1,12 @@
 
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.EventQueue;
+import java.awt.Rectangle;
+import java.awt.Toolkit;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 
@@ -19,7 +21,6 @@ import uk.co.caprica.vlcj.runtime.RuntimeUtil;
 
 import com.sun.jna.Native;
 import com.sun.jna.NativeLibrary;
-
 
 public class MainWindow extends JFrame {
 
@@ -44,25 +45,30 @@ public class MainWindow extends JFrame {
 				EventQueue.invokeLater(new Runnable() {
 					public void run() {
 						try {
-							// frame = new MainWindow();
-							// frame.setVisible(true);
-							 ss = new ServerSocket(3000);
+							 frame = new MainWindow();
+							 frame.setUndecorated(true);
+							Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();	// 取得屏幕大小
+							Rectangle bounds = new Rectangle( screenSize );
+
+							frame.setBounds( bounds );
+							 frame.setVisible(true);
+							 ss = new ServerSocket(8001);
 							 System.out.println("Server is starting...");
 							while(true){
-								   //frame.getMediaPlayer().playMedia("C:\\Users\\Administrator\\Desktop\\p.mp4");
-								    System.out.println("-----------------------");
+								    
+								    frame.getMediaPlayer().setRepeat(true);
+								    frame.getMediaPlayer().playMedia("C:\\Users\\Administrator\\Desktop\\v.mp4");
 					                s = ss.accept();
 					                System.out.println("-----------accept------------");
 					                br = new BufferedReader(new InputStreamReader(s.getInputStream()));
 					                String line = br.readLine();
 					                System.out.println(line);
 					                br.close();
-							
 							 if( line.equals("kaiqi")){
-							    frame.getMediaPlayer().playMedia("C:\\Users\\Administrator\\Desktop\\v.mp4");
-							  Thread.sleep(9000);
-							 
-							 }
+							   frame.getMediaPlayer().playMedia("C:\\Users\\Administrator\\Desktop\\v.mp4");
+							   Thread.sleep(5000);
+							   System.out.println("-----------sleep------------");
+							    }
 							
 							 
 							}
@@ -82,17 +88,21 @@ public class MainWindow extends JFrame {
 	 */
 	public MainWindow() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 591, 417);
+		setBounds(100, 100, 800, 600);
 		contentPane = new JPanel();
-		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		contentPane.setBorder(new EmptyBorder(0, 0, 0, 0));//5
 		contentPane.setLayout(new BorderLayout(0, 0));
 		setContentPane(contentPane);
 		
 		JPanel videopanel = new JPanel();
+		videopanel.setSize(800, 600);
 		contentPane.add(videopanel, BorderLayout.CENTER);
 		videopanel.setLayout(new BorderLayout(0, 0));
 		
 		playerComponent = new EmbeddedMediaPlayerComponent();
+		playerComponent.setCursorEnabled(false);
+		
+
 		videopanel.add(playerComponent);
 		
 	}
